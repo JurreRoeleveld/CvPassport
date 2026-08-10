@@ -21,7 +21,7 @@ export const LOCATIONS: Array<CvLocation> = [
     description: 'Pre-university education.',
     kind: 'education',
     coordinates: [6.9098, 52.3177],
-    zoom: 13.5,
+    zoom: 12,
   },
   {
     id: 'groningen',
@@ -35,7 +35,7 @@ export const LOCATIONS: Array<CvLocation> = [
       'Served as Chairman of GLV Idun, a study association with over 1,800 members.',
     ],
     coordinates: [6.5625, 53.2197],
-    zoom: 13,
+    zoom: 11,
   },
   {
     id: 'enschede',
@@ -46,7 +46,7 @@ export const LOCATIONS: Array<CvLocation> = [
     description:
       'Employer-sponsored traineeship combining Computer Science coursework with software engineering at Nedap.',
     coordinates: [6.8509, 52.2433],
-    zoom: 13.5,
+    zoom: 11,
   },
   {
     id: 'groenlo',
@@ -77,7 +77,7 @@ export const LOCATIONS: Array<CvLocation> = [
       'Pinia',
     ],
     coordinates: [6.6246, 52.037],
-    zoom: 14,
+    zoom: 11,
   },
 ]
 
@@ -91,5 +91,5 @@ export const HOME: CvLocation = {
   description: 'Where I live today, and where this journey begins.',
   kind: 'home',
   coordinates: [5.1214, 52.0907],
-  zoom: 12.5,
+  zoom: 11.5,
 }

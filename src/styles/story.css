@@ -82,6 +82,30 @@
   }
 }
 
+/* Keep the scrollbar inside the rounded corners: thin thumb on a
+   transparent track, with track margins matching the border radius. */
+.location-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.location-card::-webkit-scrollbar-track {
+  background: transparent;
+  margin-block: 1.25rem;
+}
+
+.location-card::-webkit-scrollbar-thumb {
+  background: var(--chip-line);
+  border-radius: 999px;
+}
+
+/* Firefox has no track margins; a thin scrollbar is the best fit there. */
+@supports not selector(::-webkit-scrollbar) {
+  .location-card {
+    scrollbar-width: thin;
+    scrollbar-color: var(--chip-line) transparent;
+  }
+}
+
 .location-card .island-kicker {
   display: block;
   margin-bottom: 0.5rem;
