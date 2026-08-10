@@ -4,41 +4,92 @@ export type CvLocation = {
   period: string
   role: string
   description: string
+  kind: 'education' | 'work' | 'home'
+  highlights?: Array<string>
+  tags?: Array<string>
   /** [longitude, latitude] */
   coordinates: [number, number]
   zoom: number
 }
 
-// Placeholder story — replace with your own locations and copy.
 export const LOCATIONS: Array<CvLocation> = [
   {
-    id: 'amsterdam',
-    name: 'Amsterdam',
-    period: '1995 — 2013',
-    role: 'Where it all started',
-    description:
-      'Grew up here. Took apart more electronics than I managed to put back together, and wrote my first lines of code.',
-    coordinates: [4.9041, 52.3676],
-    zoom: 11.5,
+    id: 'oldenzaal',
+    name: 'Oldenzaal',
+    period: '2008 — 2015',
+    role: 'Atheneum, Thij College',
+    description: 'Pre-university education.',
+    kind: 'education',
+    coordinates: [6.9098, 52.3177],
+    zoom: 13.5,
   },
   {
-    id: 'utrecht',
-    name: 'Utrecht',
-    period: '2013 — 2018',
-    role: 'Computer Science',
+    id: 'groningen',
+    name: 'Groningen',
+    period: '2015 — 2021',
+    role: 'University of Groningen',
+    kind: 'education',
     description:
-      'Studied computer science, discovered a love for building things people actually use, and shipped my first real projects.',
-    coordinates: [5.1214, 52.0907],
-    zoom: 12,
+      'BSc Life, Science and Technology (Biomedical Engineering track) followed by an MSc Biomedical Engineering, specializing in medical device design.',
+    highlights: [
+      'Served as Chairman of GLV Idun, a study association with over 1,800 members.',
+    ],
+    coordinates: [6.5625, 53.2197],
+    zoom: 13,
+  },
+  {
+    id: 'enschede',
+    name: 'Enschede',
+    period: '2021 — 2022',
+    role: 'Computer Science, University of Twente',
+    kind: 'education',
+    description:
+      'Employer-sponsored traineeship combining Computer Science coursework with software engineering at Nedap.',
+    coordinates: [6.8509, 52.2433],
+    zoom: 13.5,
   },
   {
     id: 'groenlo',
     name: 'Groenlo',
-    period: '2018 — now',
+    period: '2021 — now',
     role: 'Software Engineer at Nedap',
+    kind: 'work',
     description:
-      'Building healthcare software that matters, from front-end architecture to the systems behind it.',
-    coordinates: [6.6156, 52.0402],
-    zoom: 12.5,
+      'Developing and maintaining the React-based Dossier application, a core part of Nedap’s healthcare suite, translating care workflows and interoperability standards into intuitive interfaces.',
+    highlights: [
+      'Technical lead for a team of five engineers, most recently the migration and modernization of the resuscitation policy workflow.',
+      'Built reusable micro-frontend widgets shared across multiple healthcare applications.',
+      'Spent six months on the Frontend Framework Team, building an accessible component library aligned with the department-wide design system.',
+      'Mentored a student for 2.5 years, providing technical guidance and supporting their professional growth.',
+    ],
+    tags: [
+      'React',
+      'Vue',
+      'Lit',
+      'TypeScript',
+      'Ruby on Rails',
+      'Vitest',
+      'Cypress',
+      'Playwright',
+      'Vite',
+      'TanStack Query',
+      'Zustand',
+      'Pinia',
+    ],
+    coordinates: [6.6246, 52.037],
+    zoom: 14,
   },
 ]
+
+// Where I live today. Backs the intro section: the story opens here, and the
+// map keeps a distinct home marker in explore mode.
+export const HOME: CvLocation = {
+  id: 'utrecht',
+  name: 'Utrecht',
+  period: 'Today',
+  role: 'Home',
+  description: 'Where I live today, and where this journey begins.',
+  kind: 'home',
+  coordinates: [5.1214, 52.0907],
+  zoom: 12.5,
+}

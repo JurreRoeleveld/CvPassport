@@ -1,0 +1,256 @@
+/* Scroll story: sticky map with cards scrolling over it */
+
+.story {
+  position: relative;
+}
+
+.story-map {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  /* Small viewport height: stays stable while mobile URL bars show/hide. */
+  height: 100svh;
+}
+
+/* MapLibre's stylesheet forces position: relative on this element, so size
+   it explicitly rather than with inset. */
+.cv-map {
+  width: 100%;
+  height: 100%;
+}
+
+.cv-map--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sea-ink-soft);
+  background: linear-gradient(165deg, var(--foam), var(--sand));
+}
+
+.story-sections {
+  position: relative;
+  z-index: 1;
+  margin-top: -100vh;
+  margin-top: -100svh;
+  pointer-events: none;
+}
+
+/* Mobile first: cards sit at the bottom like a map app's sheet, keeping the
+   map visible above them. Larger screens center them on the left instead. */
+.story-intro,
+.location-section {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-inline: 1rem;
+  padding-bottom: max(3rem, env(safe-area-inset-bottom));
+}
+
+.story-intro {
+  align-items: center;
+  padding-bottom: 0;
+  text-align: center;
+}
+
+.location-card {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 26rem;
+  border-radius: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  max-height: 62svh;
+  overflow-y: auto;
+}
+
+@media (min-width: 640px) {
+  .location-section {
+    align-items: center;
+    justify-content: flex-start;
+    padding-bottom: 0;
+  }
+
+  .story-intro,
+  .location-section {
+    padding-inline: clamp(1rem, 6vw, 5rem);
+  }
+
+  .location-card {
+    padding: 1.75rem 2rem;
+    max-height: calc(100vh - 8rem);
+  }
+}
+
+.location-card .island-kicker {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.story-title {
+  margin-bottom: 0.75rem;
+  font-size: clamp(1.9rem, 7vw, 2.5rem);
+  color: var(--sea-ink);
+}
+
+.story-lede {
+  color: var(--sea-ink-soft);
+}
+
+.location-title {
+  margin-bottom: 0.25rem;
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  color: var(--sea-ink);
+}
+
+.location-role {
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.location-desc {
+  color: var(--sea-ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.location-highlights {
+  list-style: disc;
+  padding-left: 1.1rem;
+  margin-top: 0.6rem;
+  color: var(--sea-ink-soft);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.location-highlights li + li {
+  margin-top: 0.3rem;
+}
+
+.location-tags {
+  list-style: none;
+  padding: 0;
+  margin-top: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.location-tag {
+  border: 1px solid var(--chip-line);
+  background: var(--chip-bg);
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--sea-ink-soft);
+}
+
+/* Explore mode: card shown when a marker is clicked */
+
+.explore-card {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 1rem;
+  padding-bottom: max(3rem, env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+
+.explore-card .location-card {
+  position: relative;
+}
+
+.card-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--chip-bg);
+  color: var(--sea-ink-soft);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+@media (min-width: 640px) {
+  .explore-card {
+    align-items: center;
+    justify-content: flex-start;
+    padding-inline: clamp(1rem, 6vw, 5rem);
+    padding-bottom: 0;
+  }
+}
+
+/* Story progress bar: subtle clickable timeline at the bottom */
+
+.story-progress {
+  position: fixed;
+  bottom: calc(0.8rem + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(340px, 64vw);
+  height: 24px;
+  z-index: 40;
+}
+
+.story-progress-track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.story-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--lagoon), var(--lagoon-deep));
+  transform-origin: left;
+}
+
+.progress-stop {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--chip-line);
+  border-radius: 999px;
+  background: var(--chip-bg);
+  color: var(--sea-ink-soft);
+  cursor: pointer;
+}
+
+.progress-stop:hover {
+  transform: translate(-50%, -50%) scale(1.18);
+}
+
+.progress-stop.is-active {
+  color: var(--marker-icon);
+}
+
+.progress-stop--home.is-active {
+  background: var(--marker-home);
+}
+
+.progress-stop--education.is-active {
+  background: var(--marker-education);
+}
+
+.progress-stop--work.is-active {
+  background: var(--marker-work);
+}

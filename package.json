@@ -20,6 +20,8 @@
     "@tanstack/react-router": "latest",
     "@tanstack/react-router-devtools": "latest",
     "@tanstack/react-start": "latest",
+    "lucide": "^1.31.0",
+    "lucide-react": "^1.31.0",
     "maplibre-gl": "^6.2.0",
     "motion": "^13.1.0",
     "react": "^19.2.0",

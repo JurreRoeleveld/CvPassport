@@ -1,0 +1,34 @@
+/* Map markers */
+
+.map-marker {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--marker-icon);
+  border: 2px solid var(--marker-border);
+  box-shadow: 0 6px 16px rgba(23, 58, 64, 0.35);
+}
+
+.cv-map--explore .map-marker {
+  cursor: pointer;
+}
+
+.map-marker svg {
+  width: 17px;
+  height: 17px;
+}
+
+.map-marker--education {
+  background: var(--marker-education);
+}
+
+.map-marker--work {
+  background: var(--marker-work);
+}
+
+.map-marker--home {
+  background: var(--marker-home);
+}
