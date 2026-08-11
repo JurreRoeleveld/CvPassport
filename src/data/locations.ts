@@ -12,6 +12,19 @@ export type CvLocation = {
   zoom: number
 }
 
+// The opening card and its country-wide map view. Not a CV stop itself: it
+// backs the intro section and is where the explore-mode space notice returns
+// wanderers to.
+export const INTRO = {
+  id: 'intro',
+  name: 'The Netherlands',
+  title: "Hi, I'm Jurre.",
+  lede: 'I build healthcare software in the Netherlands. Scroll to travel through the places that shaped my work, all the way back to where it started.',
+  /** [longitude, latitude] */
+  coordinates: [5.3, 52.15] as [number, number],
+  zoom: 6.6,
+}
+
 export const LOCATIONS: Array<CvLocation> = [
   {
     id: 'oldenzaal',
@@ -81,8 +94,8 @@ export const LOCATIONS: Array<CvLocation> = [
   },
 ]
 
-// Where I live today. Backs the intro section: the story opens here, and the
-// map keeps a distinct home marker in explore mode.
+// Where I live today. The first story stop after the country-wide intro, and
+// the map keeps a distinct home marker in explore mode.
 export const HOME: CvLocation = {
   id: 'utrecht',
   name: 'Utrecht',

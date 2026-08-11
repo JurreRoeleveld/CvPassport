@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMotionValueEvent } from 'motion/react'
 import type { MotionValue } from 'motion/react'
 import type { Map as MapLibreMap } from 'maplibre-gl'
@@ -8,7 +8,7 @@ import {
   House,
   createElement as createLucideElement,
 } from 'lucide'
-import { HOME, LOCATIONS } from '../data/locations'
+import { HOME, INTRO, LOCATIONS } from '../data/locations'
 import { cameraAt } from '../lib/camera'
 import { useExploreMode } from '../lib/explore-mode'
 import type { CvLocation } from '../data/locations'
@@ -27,14 +27,19 @@ const MARKER_ICONS = {
 
 const NO_PADDING = { top: 0, bottom: 0, left: 0, right: 0 }
 
-// The cards overlap the middle/bottom of the viewport, so shift the camera's
-// focal point up: the focused marker floats in the upper half instead of
-// hiding behind a card.
+// Below this zoom the visitor has left the Netherlands far behind and is
+// drifting toward space; show the notice that the journey ends here.
+const SPACE_ZOOM = 3
+
+// The cards overlap the viewport: a bottom sheet on small screens, a left
+// column from 640px up (matching story.css). Pad the covered side so the
+// camera's focal point sits in the visible part instead of behind a card.
 function cardPadding(map: MapLibreMap) {
-  return {
-    ...NO_PADDING,
-    bottom: Math.round(map.getContainer().clientHeight * 0.5),
+  const container = map.getContainer()
+  if (window.matchMedia('(min-width: 640px)').matches) {
+    return { ...NO_PADDING, left: Math.round(container.clientWidth * 0.35) }
   }
+  return { ...NO_PADDING, bottom: Math.round(container.clientHeight * 0.5) }
 }
 
 function interactionHandlers(map: MapLibreMap) {
@@ -77,6 +82,7 @@ export default function CvMap({
   const { requestNudge } = useExploreMode()
   const requestNudgeRef = useRef(requestNudge)
   requestNudgeRef.current = requestNudge
+  const [spaceNotice, setSpaceNotice] = useState(false)
 
   // MapLibre GL touches `window` on import, so it is loaded lazily on the
   // client only — never during SSR.
@@ -118,6 +124,10 @@ export default function CvMap({
           .setLngLat(location.coordinates)
           .addTo(activeMap)
       }
+
+      activeMap.on('zoom', () => {
+        setSpaceNotice(exploreRef.current && activeMap.getZoom() < SPACE_ZOOM)
+      })
 
       if (exploreRef.current) {
         for (const handler of interactionHandlers(activeMap)) handler.enable()
@@ -212,6 +222,7 @@ export default function CvMap({
       for (const handler of interactionHandlers(map)) handler.enable()
       map.easeTo({ padding: NO_PADDING, duration: 500 })
     } else {
+      setSpaceNotice(false)
       for (const handler of interactionHandlers(map)) handler.disable()
       map.jumpTo({ ...cameraAt(progress.get()), padding: cardPadding(map) })
     }
@@ -223,5 +234,28 @@ export default function CvMap({
     map.jumpTo({ ...cameraAt(value), padding: cardPadding(map) })
   })
 
-  return <div ref={containerRef} className="cv-map" />
+  const returnToNetherlands = () => {
+    setSpaceNotice(false)
+    mapRef.current?.easeTo({
+      center: INTRO.coordinates,
+      zoom: INTRO.zoom,
+      duration: 2500,
+    })
+  }
+
+  return (
+    <>
+      <div ref={containerRef} className="cv-map" />
+      {spaceNotice && (
+        <div className="space-notice island-shell rise-in" role="status">
+          <p>
+            Unfortunately, I did not yet have the opportunity to go to space.
+          </p>
+          <button type="button" onClick={returnToNetherlands}>
+            Go back to the Netherlands
+          </button>
+        </div>
+      )}
+    </>
+  )
 }

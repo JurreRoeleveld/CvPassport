@@ -1,23 +1,32 @@
 import { useState } from 'react'
 import { motion, useMotionValueEvent } from 'motion/react'
 import type { MotionValue } from 'motion/react'
-import { Briefcase, GraduationCap, House } from 'lucide-react'
-import { HOME, LOCATIONS } from '../data/locations'
+import { Briefcase, GraduationCap, House, Map as MapIcon } from 'lucide-react'
+import { HOME, INTRO, LOCATIONS } from '../data/locations'
 import { suppressSnap } from '../lib/use-smooth-snap'
 import type { CvLocation } from '../data/locations'
 
-const STOPS: Array<CvLocation> = [HOME, ...LOCATIONS]
-
 const STOP_ICONS = {
+  intro: MapIcon,
   education: GraduationCap,
   work: Briefcase,
   home: House,
 } as const
 
+type ProgressStop = Pick<CvLocation, 'id' | 'name'> & {
+  kind: keyof typeof STOP_ICONS
+}
+
+// Mirrors the camera stops: the intro's country-wide view, then home, then
+// each CV location in scroll order.
+const STOPS: Array<ProgressStop> = [
+  { ...INTRO, kind: 'intro' },
+  HOME,
+  ...LOCATIONS,
+]
+
 function scrollToStop(index: number) {
-  const sections = document.querySelectorAll(
-    '.story-intro, .location-section',
-  )
+  const sections = document.querySelectorAll('.story-intro, .location-section')
   if (index >= sections.length) return
   const section = sections[index]
   suppressSnap(1500)

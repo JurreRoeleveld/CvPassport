@@ -5,7 +5,7 @@ import CvMap from '../components/CvMap'
 import LocationCard from '../components/LocationCard'
 import LocationSection from '../components/LocationSection'
 import StoryProgress from '../components/StoryProgress'
-import { LOCATIONS } from '../data/locations'
+import { HOME, INTRO, LOCATIONS } from '../data/locations'
 import { useExploreMode } from '../lib/explore-mode'
 import { useSmoothSnap } from '../lib/use-smooth-snap'
 import type { CvLocation } from '../data/locations'
@@ -42,6 +42,16 @@ function Home() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [explore])
 
+  // The explore card behaves like a modal: Escape closes it.
+  useEffect(() => {
+    if (!explore) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSelected(null)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [explore])
+
   const storyRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: storyRef,
@@ -61,15 +71,12 @@ function Home() {
         <div className="story-sections" hidden={explore}>
           <section className="story-intro">
             <div className="island-shell location-card rise-in">
-              <p className="island-kicker">Utrecht — Today</p>
-              <h1 className="display-title story-title">Hi, I&apos;m Jurre.</h1>
-              <p className="story-lede">
-                I build healthcare software, and this is where I live today.
-                Scroll to travel back through the places that shaped my work,
-                all the way to where it started.
-              </p>
+              <p className="island-kicker">{INTRO.name}</p>
+              <h1 className="display-title story-title">{INTRO.title}</h1>
+              <p className="story-lede">{INTRO.lede}</p>
             </div>
           </section>
+          <LocationSection location={HOME} />
           {LOCATIONS.map((location) => (
             <LocationSection key={location.id} location={location} />
           ))}

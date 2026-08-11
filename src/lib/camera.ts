@@ -1,16 +1,18 @@
-import { HOME, LOCATIONS } from '../data/locations'
+import { HOME, INTRO, LOCATIONS } from '../data/locations'
 
 export type CameraPosition = {
   center: [number, number]
   zoom: number
 }
 
-// The story opens at home behind the intro section; each following stop
-// matches a location section in scroll order.
-const STOPS: Array<CameraPosition> = [HOME, ...LOCATIONS].map((location) => ({
-  center: location.coordinates,
-  zoom: location.zoom,
-}))
+// The story opens over the whole country behind the intro; home and each
+// following stop match a section in scroll order.
+const STOPS: Array<CameraPosition> = [INTRO, HOME, ...LOCATIONS].map(
+  (location) => ({
+    center: location.coordinates,
+    zoom: location.zoom,
+  }),
+)
 
 function easeInOutCubic(t: number): number {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2

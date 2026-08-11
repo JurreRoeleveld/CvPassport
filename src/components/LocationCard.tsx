@@ -4,8 +4,8 @@ export default function LocationCard({ location }: { location: CvLocation }) {
   return (
     <>
       <p className="island-kicker">{location.period}</p>
-      <h2 className="display-title location-title">{location.name}</h2>
-      <p className="location-role">{location.role}</p>
+      <h2 className="display-title location-title">{location.role}</h2>
+      <p className="location-role">{location.name}</p>
       <p className="location-desc">{location.description}</p>
       {location.highlights && (
         <ul className="location-highlights">
