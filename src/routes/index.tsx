@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { useScroll } from 'motion/react'
+import { motion, useScroll, useSpring, useTransform } from 'motion/react'
+import { ChevronDown } from 'lucide-react'
 import CvMap from '../components/CvMap'
 import LocationCard from '../components/LocationCard'
 import LocationSection from '../components/LocationSection'
@@ -57,13 +58,23 @@ function Home() {
     target: storyRef,
     offset: ['start start', 'end end'],
   })
+  // Wheel and trackpad scrolling arrive as discrete steps; driving the map
+  // camera with the raw value makes it stutter. A spring smooths the steps
+  // into a continuous glide without adding noticeable lag.
+  const cameraProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.0001,
+  })
+  // The scroll hint has done its job as soon as the journey starts moving.
+  const hintOpacity = useTransform(scrollYProgress, [0, 0.03], [1, 0])
 
   return (
     <main>
       <div ref={storyRef} className="story">
         <div className="story-map">
           <CvMap
-            progress={scrollYProgress}
+            progress={cameraProgress}
             explore={explore}
             onSelect={setSelected}
           />
@@ -74,6 +85,14 @@ function Home() {
               <p className="island-kicker">{INTRO.name}</p>
               <h1 className="display-title story-title">{INTRO.title}</h1>
               <p className="story-lede">{INTRO.lede}</p>
+              <motion.div
+                className="scroll-hint"
+                style={{ opacity: hintOpacity }}
+                aria-hidden="true"
+              >
+                <span>Scroll</span>
+                <ChevronDown size={18} />
+              </motion.div>
             </div>
           </section>
           <LocationSection location={HOME} />

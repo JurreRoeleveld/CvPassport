@@ -16,7 +16,9 @@ export function suppressSnap(durationMs: number) {
 // Snap only when the nearest section center is within this fraction of the
 // viewport height, mirroring scroll-snap-type "proximity".
 const PROXIMITY = 0.45
-const SETTLE_DELAY_MS = 140
+// Long enough that successive wheel flicks don't get interrupted by a snap
+// starting between them.
+const SETTLE_DELAY_MS = 100
 
 /**
  * Smoothly snaps the window scroll to the nearest story section after the
@@ -56,9 +58,14 @@ export function useSmoothSnap(enabled: boolean) {
       if (bestDistance > window.innerHeight * PROXIMITY) return
 
       snapping = true
+      // The page is at rest when the snap starts, so ease in as well as out —
+      // a fast-start curve reads as the page being yanked. Scale the duration
+      // with the distance so short corrections stay subtle.
+      const duration =
+        0.45 + 0.6 * Math.min(bestDistance / (window.innerHeight / 2), 1)
       animation = animate(window.scrollY, target, {
-        duration: 0.7,
-        ease: [0.22, 1, 0.36, 1],
+        duration,
+        ease: [0.45, 0, 0.25, 1],
         onUpdate: (value) => window.scrollTo(0, value),
         onComplete: () => {
           snapping = false

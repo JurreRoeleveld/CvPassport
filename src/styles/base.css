@@ -4,6 +4,16 @@ body,
   min-height: 100%;
 }
 
+/* The story progress bar shows position in the journey; the window scrollbar
+   is redundant chrome floating over the map. Scrolling itself still works. */
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   margin: 0;
   color: var(--sea-ink);
