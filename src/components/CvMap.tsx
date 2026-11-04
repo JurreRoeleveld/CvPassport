@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { useMotionValueEvent } from 'motion/react'
 import type { MotionValue } from 'motion/react'
 import type { Map as MapLibreMap } from 'maplibre-gl'
+// Bundle the MapLibre worker explicitly; the library's import.meta.url lookup
+// does not survive the production build.
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import {
   Briefcase,
   GraduationCap,
@@ -97,6 +100,7 @@ export default function CvMap({
     import('maplibre-gl').then((module) => {
       // Vite's CJS interop does not always provide a default export here.
       const maplibregl = module.default ?? module
+      maplibregl.setWorkerUrl(maplibreWorkerUrl)
       if (cancelled || !containerRef.current) return
 
       map = new maplibregl.Map({
